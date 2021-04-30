@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alignment Chart Creator</title>
+    <link href="default-styles.css" type="text/css" rel="stylesheet" />
+      
+    <script>
+        let alignBoxes;
+        let charBoxes;
+        let charSelected = -1;
+        let charObj;
+        let characterSet;
+
+        const handleResponse = (e) => {
+          const obj = JSON.parse(e.target.response); // turn it back into an object
+
+          charObj = obj;
+          // add character images to boxes
+          const imageboxes = document.querySelector('#characters-admin');
+          for (let i = 0; i < obj.length; i += 1) {
+            if(document.querySelector('#' + obj[i].media.replace(/\W/g, '')) === null){
+                const mediaDiv = document.createElement('div');
+                mediaDiv.id = obj[i].media.replace(/\W/g, '');
+                mediaDiv.innerHTML += "<h2>" + obj[i].media + "</h2>";
+                imageboxes.appendChild(mediaDiv);
+            }
+            const mediaDivSelected = document.querySelector('#' + obj[i].media.replace(/\W/g, ''));
+            
+            //create elements inside each individual box
+            const cboxdiv = document.createElement('div');
+            cboxdiv.className = "cboxadmin";
+            const cboxp = document.createElement('p');
+            cboxp.className = "contents";
+            const image = document.createElement('img');
+            cboxp.innerHTML = obj[i].char;
+            image.src = obj[i].img;
+            cboxdiv.appendChild(cboxp);
+            cboxdiv.appendChild(image);  
+            
+            //create delete button for each character and give it delete ability
+            const deleteDiv = document.createElement("div");
+            deleteDiv.id = "deleteDiv";
+            const deleteButton = document.createElement("button");
+            deleteButton.textContent = "Delete";
+            deleteButton.onclick = function(){
+                deleteCharacter(obj[i].media, obj[i].char);
+            };
+            deleteDiv.appendChild(deleteButton);  
+            cboxdiv.appendChild(deleteDiv);
+            mediaDivSelected.appendChild(cboxdiv);
+          }
+        };
+        
+        //essentially refresh with new API values since one is now gone
+        const handleDeleteResponse = (e) => {
+            const imageboxes = document.querySelector('#characters-admin');
+            imageboxes.innerHTML = "";
+            getAllCharSet();
+        }
+
+        //get all characters for the admin page
+        const getAllCharSet = () => {
+          const fullURL = '/get-all-characters';
+          const xhr = new XMLHttpRequest();
+          xhr.onload = handleResponse;
+          xhr.open('GET', fullURL);
+          xhr.setRequestHeader('Accept', 'application/javascript');
+          xhr.send();
+        }; 
+        
+        //send API which character to kill
+        const deleteCharacter = (media, character) => {
+            const nameAction = "/remove-character";
+			const nameMethod = "post";
+            
+            const xhr = new XMLHttpRequest();
+			xhr.open(nameMethod,nameAction); // NEW - in the past we've been using "GET"
+			
+			xhr.setRequestHeader('Accept','application/json');
+			xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+			
+			xhr.onload = () => handleDeleteResponse(xhr);
+			
+			const formData = `media=${media}&char=${character}`;
+            
+			xhr.send(formData);
+        }
+ 
+        const init = () => {
+          getAllCharSet();
+        };
+
+        window.onload = init;
+    </script>
+  </head>
+  <body>
+    <header>
+      <div class="topnav">
+        <a href="/">Home</a>
+        <a href="/app">App</a>
+        <a href="/suggest">Suggest</a>
+        <a href="/admin" class="active" >Admin</a>
+      </div>
+    </header>
+          
+      
+<div id="characters-admin">
+</div>
+    
+  </body>
+</html>

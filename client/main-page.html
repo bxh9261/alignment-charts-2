@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alignment Chart Creator</title>
+    <link href="/default-styles.css" type="text/css" rel="stylesheet" />   
+  </head>
+  <body>
+    <header>
+      <div class="topnav">
+        <a href="/" class="active">Home</a>
+        <a href="/app">App</a>
+        <a href="/suggest">Suggest</a>
+        <a href="/admin">Admin</a>
+      </div>
+    </header>  
+    <h1>Alignment Chart Creator</h1>
+      
+    <img src="/alignment-charts.gif" alt="alignment chart gif" id="homeGif" class="redbox">
+      
+    <button onclick="window.location.href='/app'" id="startButton">Get Started!</button>  
+
+    <div class="redbox" id="apiContent">
+      API ZONE 
+      <div id="api">
+          <button onclick="window.location.href='/get-characters?set=Spongebob'">Spongebob Characters</button> 
+          <button onclick="window.location.href='/get-all-characters'">ALL Characters</button> 
+      </div>  
+    </div> 
+  </body>
+</html>

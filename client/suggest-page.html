@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Alignment Chart Creator</title> 
+    <link href="default-styles.css" type="text/css" rel="stylesheet" />
+
+    <script>
+        
+    //get message from JSON to display    
+  	"use strict";
+    const parseJSON = (xhr, content) => {
+    	if(xhr.response && xhr.getResponseHeader('Content-Type') === 'application/json'){
+      	const obj = JSON.parse(xhr.response);
+      	console.dir(obj);
+      	
+      	if(obj.message){
+      		content.innerHTML += `<p>${obj.message}</p>`;
+      	}
+      }
+    };
+
+    //handle error number
+    const handleResponse = (xhr, media, charac, image) => {
+      const content = document.querySelector('#suggestContent');
+      const imgHTML = '<img src="' + image + '" alt="' + charac + '" width="100" height="100">'
+        
+      switch(xhr.status){
+      	case 200:
+      		content.innerHTML = '<b>Success!</b>';
+      		break;
+      	case 201:
+      		content.innerHTML = '<b>Created character: ' + charac + ', from ' + media + ', with image: <br>' + imgHTML + '</b>';
+            content.innerHTML += `<p>Note: If you don't see an image above, try a different image link!</p>`;
+      		break;
+      	case 204:
+      		content.innerHTML = '<b>Character Updated, with image: </b> <br>' + imgHTML;
+            content.innerHTML += `<p>Note: If you don't see an image above, try a different image link!</p>`;  
+      		break;
+      	case 400:
+      		content.innerHTML = '<b>Bad Request!</b>';
+      		break;
+        //important
+        case 418:
+            content.innerHTML = '<b>I am a teapot!<b>';
+            break;
+      	default:
+      		content.innerHTML = '<b>Error code not implemented by client</b>';
+      }
+      
+      parseJSON(xhr,content);
+    };
+
+    //from body parse and POST demo on mycourses
+    const sendPost = (e, nameForm) => {
+			e.preventDefault();
+			
+			const nameAction = nameForm.getAttribute("action");
+			const nameMethod = nameForm.getAttribute("method");
+			
+			const charField = nameForm.querySelector("#char");
+			const imageField = nameForm.querySelector("#charimg");
+            const mediaField = nameForm.querySelector("#medianame")
+			
+			const xhr = new XMLHttpRequest();
+			xhr.open(nameMethod,nameAction);
+			
+			xhr.setRequestHeader('Accept','application/json');
+			xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
+			
+			xhr.onload = () => handleResponse(xhr, mediaField.value, charField.value, imageField.value);
+			
+			const formData = `media=${mediaField.value}&char=${charField.value}&img=${imageField.value}`;
+            
+			xhr.send(formData);
+			
+			return false; // prevents event bubbling
+    };
+        
+    //client-side checking for errors before posting
+    const addChar = (e) => {
+        const charField = nameForm.querySelector("#char");
+        const imageField = nameForm.querySelector("#charimg");
+        const mediaField = nameForm.querySelector("#medianame");
+        
+        if(startsWithLetter(charField.value) && 
+           startsWithLetter(imageField.value) &&
+           startsWithLetter(mediaField.value)){
+             sendPost(e, nameForm);
+        } 
+        else{
+            const content = document.querySelector('#suggestContent');
+            content.innerHTML = '<b>One or more values is invalid! Values should start with a letter.</b>';
+            e.preventDefault();
+        }
+    };
+        
+    //starting with anything but a letter messes things up
+    const startsWithLetter = (str) => {
+        if(str.length === 0){
+            return false;
+        }
+        
+        let codeZ = str.charCodeAt(0);
+        if(!(codeZ > 64 && codeZ < 91) && !(codeZ > 96 && codeZ < 123)){
+            return false;
+        }
+        
+        return true;
+    }
+
+    const init = () => {
+      const nameForm = document.querySelector('#nameForm');
+      
+      nameForm.addEventListener('submit', addChar);
+    };
+
+    window.onload = init;
+
+  </script>  
+  </head>
+  <body>
+    <header>
+      <div class="topnav">
+        <a href="/">Home</a>
+        <a href="/app">App</a>
+        <a href="/suggest" class="active">Suggest</a>
+        <a href="/admin">Admin</a>
+      </div>
+    </header>
+      
+  <section id="top" class="redbox">
+    <h3>Add a Character</h3>
+    <form id="nameForm" action="/add-character" method="post">
+        <label for="medianame">Name of Media</label>
+      <input type="text" id="medianame" name="medianame"><br><br>
+
+      <div id="char1div">
+          <label>Character Name:</label>
+          <input type="text" id="char" name="char1"><br><br>
+          <label>Character Image URL:</label>
+          <input type="text" id="charimg" name="char1img"><br><br>    
+      </div>
+      <div id="addCharButton">
+          <input type="submit" value="Add Character" />
+      </div>
+    </form>
+  </section>
+  <section id="suggestContent" class="redbox">
+      Add a character to the alignment charts app using the form above!
+  </section>   
+    
+  </body>
+</html>

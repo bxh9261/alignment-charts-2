@@ -1,0 +1,247 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=MedievalSharp&display=swap');
+
+/*------------------------GENERAL------------------------*/
+
+body{
+    background-color: #26282a;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
+h1{
+    font-family: 'MedievalSharp', cursive;
+    font-size: 4em;
+    width: 100%;
+    text-align: center;
+    margin-top: 3vw;
+    margin-bottom: 3vw;
+    color: #e40712;
+}
+
+h2{
+    font-family: 'MedievalSharp', cursive;
+    font-size: 3em;
+    width: 100%;
+    text-align: center;
+    margin: 3vw;
+    color: #e40712;
+}
+
+/* https://www.w3schools.com/howto/howto_js_topnav.asp */
+
+/* Add a black background color to the top navigation */
+.topnav {
+  background-color: #090809;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+}
+
+/* Style the links inside the navigation bar */
+.topnav a {
+  float: left;
+  color: #e40712;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  font-size: 17px;
+}
+
+/* Change the color of links on hover */
+.topnav a:hover {
+  background-color: #979AA4;
+  color: black;
+}
+
+/* Add a color to the active/current link */
+.topnav a.active {
+  background-color: #e40712;
+  color: white;
+}
+
+.redbox{
+    border: 5px solid #e40712;
+    border-radius: 10px;
+    background-color: #979AA4;
+}
+
+button{
+    border: black 3px solid; 
+    border-radius: 0.5em;
+    background-color: #ddd;
+}
+
+button:active{
+    background-color: #979AA4;
+}
+
+select{
+    border: black 3px solid; 
+    border-radius: 0.5em;
+    background-color: #ddd;
+}
+
+
+/*----------------------------HOME PAGE-------------------------------------*/
+
+#apiContent{
+    width: 30%;
+    margin: auto;
+    padding: 2%;
+    text-align: center;
+    margin-bottom: 2%;
+}
+
+#api{
+    margin-top: 5%;
+    display: flex;
+    justify-content: space-around;
+}
+
+#homeGif{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 2%;
+}
+
+#startButton{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 5%;
+    padding: 1%;
+}
+
+/*----------------------------MAIN APP PAGE---------------------------------*/
+
+/*
+https://stackoverflow.com/questions/39517793/how-can-we-make-a-4-by-4-grid-using-css
+*/
+* { box-sizing: border-box; }
+
+#container { width: 36%; height: 36vw; display: flex; flex-direction: row; flex-wrap: wrap; background: #979AA4; margin:auto; margin-top:4vh; padding: 0.5%;}
+
+#container > div {margin: 0.2%; border: black 3px solid; border-radius: 0.5em; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #ddd;}
+
+#container > .textboxX { width: 26.4666%; height: 9.5%;  }
+
+#container > .textboxY { width: 19%; height: 29.6333%; }
+
+#container > .textboxXY { width: 19%; height: 9.5%; }
+
+#container > .box { width: 26.4666%; height: 29.6333%; }
+
+#character-images { width: 54%; display: flex; flex-direction: row; flex-wrap: wrap; margin: auto; background-color: #979AA4;}
+
+#character-images > div { width: 11.11%; height: 6vw; border: black 3px solid; border-radius: 0.5em; background-color: #ddd; margin: auto;}
+
+#chartButtons {display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;}
+
+#chartButtons * {margin: 2vh; }
+
+img{
+    max-width: 100%;
+    max-height: 100%;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0,0,0);
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #ddd;
+  margin: 15% auto;
+  padding: 20px;
+  width: 800px;
+  border: 5px solid #e40712;
+  border-radius: 10px;   
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.close {
+  color: #e40712;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  margin-left: 20px;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+#download{
+    margin: auto;
+}
+
+canvas{
+    border: black 3px solid; border-radius: 0.5em;
+    margin-bottom: 10px;
+}
+
+/*--------------------------------ADMIN PAGE------------------------------*/
+
+#characters-admin { width: 100%; display: flex; flex-direction: row; flex-wrap: wrap;  }
+
+#characters-admin > div {width: 100%; display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;}
+
+.cboxadmin { width: 25vw; border: 5px solid #e40712; border-radius: 10px; background-color: #979AA4; margin:20px; display: flex; flex-direction: column; flex-wrap:nowrap; align-items: center;}
+
+.cboxadmin > img {width: 10vw; height: 10vw; padding: 1vw;}
+
+.cboxadmin > div > button {margin: 1vw;}
+
+.cboxadmin > p { font-weight: bold; }
+ 
+#deleteDiv {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+
+/*--------------------------------SUGGEST PAGE------------------------------*/
+
+#top{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 30%;
+    margin: auto;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+#top input{
+    border: black 3px solid; 
+    border-radius: 0.5em;
+    background-color: #ddd;
+}
+
+#addCharButton{
+    display: flex;
+    justify-content: center;
+}
+
+#suggestContent{
+    width: 50%;
+    margin: auto;
+    padding: 2%;
+    text-align: center;
+}

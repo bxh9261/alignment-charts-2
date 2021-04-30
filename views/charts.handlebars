@@ -3,6 +3,11 @@
   <head>
     <title>Alignment Chart Creator</title>
     <link rel="stylesheet" type="text/css" href="/assets/default-styles.css"/>
+    <script crossorigin src="https://unpkg.com/react@16/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
     <script>
         let alignBoxes;
         let charBoxes = [];
@@ -12,39 +17,6 @@
 
         
         const handleResponse = (e) => {
-          const obj = JSON.parse(e.target.response); // turn it back into an object
-
-          charObj = obj;
-          // add character images to boxes
-          const cboxes = document.querySelector('#characters');
-          //lots of CSS updating to fit in the specific number of characters    
-          if(obj.length < 9){
-              cboxes.style.width = obj.length*6 + "%";
-          }
-          else{ 
-              cboxes.style.width = "54%";
-          }    
-          for (let i = 0; i < obj.length; i += 1) {
-            const charbox = document.createElement('div');  
-            charbox.className = "cbox";  
-            if(obj.length < 9){
-              charbox.style.width = 100/obj.length + "%";
-            }
-            else{
-              charbox.style.width = "11.11%";
-            }    
-            const image = document.createElement('img');
-            image.src = obj[i].img;
-            charbox.appendChild(image);
-            cboxes.appendChild(charbox);
-            charBoxes.push(charbox);
-          }
-            
-          
-          //give each the ability to be added to the chart
-          for (let i = 0; i < charBoxes.length; i += 1) {
-            charBoxes[i].addEventListener('click', charClicked);
-          }
         }; 
 
         //get JUST the media names to populate the dropdown menu
@@ -125,33 +97,14 @@
         
         //get all characters
         const getAllCharSet = () => {
-          const fullURL = '/get-all-characters';
-          const xhr = new XMLHttpRequest();
-          xhr.onload = handleResponse;
-          xhr.open('GET', fullURL);
-          xhr.setRequestHeader('Accept', 'application/javascript');
-          xhr.send();
         };
 
         //get a set of characters
         const getCharSet = (set = 'Spongebob') => {
-          const jokeURL = '/get-characters';
-          const fullURL = jokeURL.concat(`?set=${set}`);
-          const xhr = new XMLHttpRequest();
-          xhr.onload = handleResponse;
-          xhr.open('GET', fullURL);
-          xhr.setRequestHeader('Accept', 'application/javascript');
-          xhr.send();
         };
         
         //get all characters but do something different with it (just get media values)
         const getMediaOnly = () => {
-          const fullURL = '/get-all-characters';
-          const xhr = new XMLHttpRequest();
-          xhr.onload = handleMediaOnly;
-          xhr.open('GET', fullURL);
-          xhr.setRequestHeader('Accept', 'application/javascript');
-          xhr.send();
         };
 
         //get new characters on dropdown selected
@@ -390,7 +343,8 @@
     </button>  
 </div>      
     
-      
+  <section id="makeCharacter" style="display: none;">
+  </section> 
 <section id="characters" class="redbox">
 
 </section>

@@ -3,7 +3,7 @@ const models = require('../models');
 const { Chart } = models;
 
 const savedPage = (req, res) => {
-  Character.CharacterModel.findByOwner(req.session.account._id, (err, docs) => {
+  Chart.ChartModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occured' });
@@ -14,7 +14,7 @@ const savedPage = (req, res) => {
 
 const makeChart = (req, res) => {
   const chartData = {
-    imageLinks: req.body.imageLinks
+    imageLinks: req.body.imageLinks,
   };
 
   const newChart = new Chart.ChartModel(chartData);
@@ -23,7 +23,7 @@ const makeChart = (req, res) => {
 
   chartPromise.then(() => res.json({ redirect: '/saved-charts' }));
 
-  chartromise.catch((err) => {
+  chartPromise.catch((err) => {
     console.log(err);
     return res.status(400).json({ error: 'An error occured!' });
   });

@@ -84,7 +84,7 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
 };
 
 AccountSchema.statics.updatePassword = (data, callback) => {
-  let currAcc = AccountModel.findByUsername(data.username, (err, doc) => {
+  const currAcc = AccountModel.findByUsername(data.username, (err, doc) => {
     if (err) {
       return callback(err);
     }
@@ -102,7 +102,7 @@ AccountSchema.statics.updatePassword = (data, callback) => {
   });
 
   const search = {
-    _id: convertId(currAcc._id)
+    _id: convertId(currAcc._id),
   };
 
   AccountModel.generateHash(data.pass, (salt, hash) => {

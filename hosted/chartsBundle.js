@@ -1,10 +1,8 @@
 "use strict";
 
-var _axios = _interopRequireDefault(require("axios"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var axios = require('axios');
 
 var alignBoxes;
 var charBoxes = [];
@@ -172,7 +170,7 @@ var saveImage = function saveImage() {
     imageLinks.push('');
   }
 
-  _axios["default"].post('/makeChart', body).then(function (response) {
+  axios.post('/makeChart', body).then(function (response) {
     console.log(response);
   })["catch"](function (error) {
     console.log(error);

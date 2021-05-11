@@ -77,7 +77,40 @@ const signup = (request, response) => {
   });
 };
 
+const password = (request, response) => {
+  const req = request;
+  const res = response;
+
+  const username = `${req.body.username}`;
+  const oldpass = `${req.body.oldpass}`;
+  const pass = `${req.body.pass}`;
+  const pass2 = `${req.body.pass2}`;
+
+  if (!username || !oldpass || !pass || !pass2) {
+    return res.status(400).json({ error: 'All fields are required.' });
+  }
+
+  if (pass !== pass2) {
+    return res.status(400).json({ error: 'Passwords do not match!' });
+  }
+
+  Account.AccountModel.updatePassword(req.body, (err) => {
+    // An error occured
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ err: 'An error occurred.' });
+    }
+
+    return '';
+  });
+
+  return res.status(204).json({ message: 'Password Updated!' });
+};
+
+
+
 module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
+module.exports.password = password;

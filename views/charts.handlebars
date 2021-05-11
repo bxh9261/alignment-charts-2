@@ -7,247 +7,8 @@
     <script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.development.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
-    <script>
-        let alignBoxes;
-        let charBoxes = [];
-        let charSelected = -1;
-        let charObj;
-        let characterSet;
-
-        
-        const handleResponse = (e) => {
-        }; 
-
-        //get JUST the media names to populate the dropdown menu
-        const handleMediaOnly = (e) => {
-          const obj = JSON.parse(e.target.response); // turn it back into an object
-          const medArray = [];
-
-          for (let i = 0; i < obj.length; i += 1) {
-            if (!medArray.includes(obj[i].media)) {
-              medArray.push(obj[i].media); 
-            }
-          }
-          for (let i = 0; i < medArray.length; i += 1) {
-            const option = document.createElement('option');
-            option.innerHTML = medArray[i];
-            characterSet.appendChild(option);
-          }
-            
-          const allOption = document.createElement('option');
-          allOption.innerHTML = "ALL";
-          characterSet.appendChild(allOption);     
-        };
-
-        //click and unclick box
-        const boxReset = () => {
-          for(let i = 0; i < charBoxes.length; i+=1){
-              if(i === charSelected){
-                  charBoxes[i].style.border = "#E40712 5px solid";
-                  charBoxes[i].style.backgroundColor = "#979AA4";
-              }
-              else{
-                  charBoxes[i].style.border = "black 3px solid";
-                  charBoxes[i].style.backgroundColor = "#ddd";
-              }
-          }
-        };
-
-        //place an item... whether use clicks on the div or directly on the image currently on the board
-        const alignClicked = (e) => {
-          // box on alignment chart was selected
-            
-          let selectedDiv = e.target;               
-
-          if(e.target.id === "imgOnChart"){
-              selectedDiv = e.target.parentNode; 
-              e.target.remove();
-          }else if(e.target.children.length > 0){
-              e.target.innerHTML = "";
-          }
-
-          if (charSelected > -1) {
-            const image = document.createElement('img');
-            image.src = charObj[charSelected].img;
-            image.id = "imgOnChart";
-            //image.addEventListener('click', alignClicked);
-            selectedDiv.appendChild(image);
-          }
-        };
-
-        const charClicked = (e) => {
-          // character was selected
-
-          for (let i = 0; i < charBoxes.length; i += 1) {
-            if (e.target === charBoxes[i].getElementsByTagName('img')[0]) {
-              charSelected = i;
-            }
-          }
-            
-          boxReset();
-        };
-        
-        //clear button selected. remove all chart images.
-        const clearClicked = () => {
-            for(let i = 0; i < alignBoxes.length; i+=1){
-                alignBoxes[i].innerHTML = "";
-            }
-        }
-        
-        //get all characters
-        const getAllCharSet = () => {
-        };
-
-        //get a set of characters
-        const getCharSet = (set = 'Spongebob') => {
-        };
-        
-        //get all characters but do something different with it (just get media values)
-        const getMediaOnly = () => {
-        };
-
-        //get new characters on dropdown selected
-        const resetChars = () => {
-          const cboxes = document.querySelector('#characters');
-          cboxes.innerHTML = '';
-          charBoxes = [];
-          let selText = characterSet.options[characterSet.selectedIndex].text;
-          if(selText === "ALL"){
-              getAllCharSet();
-          }
-          else{
-              getCharSet(selText);
-          }
-          charSelected = -1;
-        };
-        
-        //Do I need to credit myself? This is from https://people.rit.edu/bxh9261/330/exercises/hello-canvas.html
-        const drawChart = () => {
-            
-            // Get the modal
-            let canvasModal = document.querySelector("#canvasModal");
-            canvasModal.style.display = "block";
-            
-            let xspan = document.querySelector(".close");
-            xspan.addEventListener('click', closeModal);
-            
-            let canvas = document.querySelector("canvas");
-            
-            let download = document.querySelector("#download");
-            download.addEventListener('click', downloadImage);
-            
-            // B - the ctx variable points at a “2D drawing context” 
-            var ctx = canvas.getContext("2d");     
-            
-            // C - all fill operations are now in yellow 
-            ctx.fillStyle = "white";      
-            
-            // D - fill a rectangle with the current fill color 
-            ctx.fillRect(0,0,690,640);
-            
-            ctx.save();
-            
-            // horizontal alignment 
-            ctx.textAlign = "center"; 
- 
-            // vertical alignment 
-            ctx.textBaseline = "middle"; 
-			
-			
-			// E - set the current font 
-            ctx.font = "bold 20pt Gloria Hallelujah";      
-            
-            // F - change the current fill color 
-            ctx.fillStyle = "#000000";      
-            
-            // G - draw and fill text using current fill color 
-            ctx.fillText("Lawful",200,85);
-            ctx.fillText("Neutral",370,85);
-            ctx.fillText("Chaotic",540,85);
-            
-            ctx.fillText("Good",75,185);
-            ctx.fillText("Neutral",75,185+170);
-            ctx.fillText("Evil",75,185+340);
-            
-            ctx.font = "bold 10pt Arial";
-            
-            ctx.fillText("Created with alignment-charts.herokuapp.com", 520, 630);
-            
-            ctx.restore();
-            
-            ctx.strokeStyle = "black";
-            ctx.lineWidth = 5;
-            
-            ctx.beginPath();
-            
-            //horizontal lines
-            for(let i = 100; i <= 640; i+=170){
-                ctx.moveTo(150,i);     
-                ctx.lineTo(660,i);
-            }
-            
-            //vertical lines
-            for(let i = 150; i <= 690; i+=170){
-                ctx.moveTo(i,100);     
-                ctx.lineTo(i,610);
-            }
-            
-            ctx.closePath();
-            
-            ctx.stroke();
-            
-            for(let i = 0; i < alignBoxes.length; i+=1){
-                //https://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
-                if(alignBoxes[i].getElementsByTagName('img').length > 0){
-                    base_image = new Image();
-                    base_image.src = alignBoxes[i].getElementsByTagName('img')[0].src;
-                    base_image.width = "130";
-                    base_image.height = "130";
-                    let scale = Math.min(150 / base_image.width, 150 / base_image.height);
-                    ctx.drawImage(base_image, 155+170*(i%3), 105+170*Math.floor(i/3), base_image.width * scale, base_image.height * scale);
-
-                }
-            }
-        }
-        
-        //X button on modal
-        const closeModal = () => {
-            let canvasModal = document.querySelector("#canvasModal");
-            canvasModal.style.display = "none";
-        }
-        
-        //https://stackoverflow.com/questions/8126623/downloading-canvas-element-to-an-image
-        const downloadImage = () => {
-            let download = document.querySelector("#download");
-            let image = document.querySelector("canvas").toDataURL("image/png")
-                .replace("image/png", "image/octet-stream");
-            download.setAttribute("href", image);
-            //download.setAttribute("download","archive.png");
-        }
-
-        const init = () => {
-          getCharSet();
-          // An Event *Listeners*
-          alignBoxes = document.querySelectorAll('.box');
-          for (let i = 0; i < alignBoxes.length; i += 1) {
-            alignBoxes[i].addEventListener('click', alignClicked);
-          }
-
-          characterSet = document.querySelector('#characterSet');
-          characterSet.addEventListener('change', resetChars);
-          getMediaOnly();
-            
-          clearButton = document.querySelector("#clear");
-          clearButton.addEventListener('click', clearClicked);
-            
-          createButton = document.querySelector("#create");
-          createButton.addEventListener('click', drawChart);
-            
-        };
-
-        window.onload = init;
-    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
@@ -328,11 +89,11 @@
   </div>
 </div>
    
-<div id="chartButtons">
-    <select id="characterSet">
-    </select>  
-        
-    <button onclick="window.location.href='/maker'">Add Characters</button>
+<div id="chartButtons">  
+    <div id="characterSet">
+
+    </div>
+    <button onClick="window.location.href='/maker'">Add Characters</button>
 
     <button id="clear">
         Clear
@@ -340,12 +101,12 @@
 
     <button id="create">
         Create Chart
-    </button>  
+     </button>  
 </div>      
     
   <section id="makeCharacter" style="display: none;">
   </section> 
-<section id="characters" class="redbox">
+<section id="characters-picker">
 
 </section>
      
@@ -363,6 +124,6 @@
         </div>  
       </div>
 </div> 
-<script src="/assets/bundle.js"></script>
+<script src="/assets/chartsBundle.js"></script>
 </body>     
 </html>

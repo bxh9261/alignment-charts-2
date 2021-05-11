@@ -9,14 +9,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
   <link rel="stylesheet" type="text/css" href="/assets/default-styles.css"/>
 </head>
-<body> 
-  <nav>
-    <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
-    <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
-    <div class="navlink"><a id="passwordButton" href="/password">Change Password</a></div>
-  </nav>
-  <section id="content"></section>
-  <section id="errorMessage"></section>
-  <script src="/assets/loginBundle.js"></script>
+<body>
+      <header>
+      <div class="topnav">
+        <a href="/logout">Log Out</a>
+        <a href="/chart-maker">App</a>
+        <a href="/maker" class="active">Suggest</a>
+      </div>
+    </header>
+  <section id="savedCharts">
+  </section>
+  <script src="/assets/savedBundle.js"></script>
 </body>
 </html>

@@ -132,9 +132,9 @@ https://stackoverflow.com/questions/39517793/how-can-we-make-a-4-by-4-grid-using
 
 #container > .box { width: 26.4666%; height: 29.6333%; }
 
-#character-images { width: 54%; display: flex; flex-direction: row; flex-wrap: wrap; margin: auto; background-color: #979AA4;}
+#characters-picker > div { width: 54%; display: flex; flex-direction: row; flex-wrap: wrap; margin: auto; background-color: #979AA4;}
 
-#character-images > div { width: 11.11%; height: 6vw; border: black 3px solid; border-radius: 0.5em; background-color: #ddd; margin: auto;}
+#characters-picker > div > div { width: 11.11%; height: 6vw; border: black 3px solid; border-radius: 0.5em; background-color: #ddd; margin: auto;}
 
 #chartButtons {display: flex; flex-direction: row; flex-wrap: wrap; justify-content: center;}
 
@@ -244,4 +244,9 @@ canvas{
     margin: auto;
     padding: 2%;
     text-align: center;
+}
+
+.character img{
+    width: 11%;
+    height: auto;
 }

@@ -13,6 +13,8 @@
     "build": "npm run buildLoginBundle && npm run buildAppBundle",
     "watchLoginBundle": "babel --watch ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
     "watchAppBundle": "babel --watch ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js",
+    "watchChartsBundle": "babel --watch ./client/charts ./client/helper --presets @babel/preset-react --out-file ./hosted/chartsBundle.js",
+    "watchSavedBundle": "babel --watch ./client/saved ./client/helper --presets @babel/preset-react --out-file ./hosted/savedBundle.js",
     "nodemon": "nodemon --watch ./server ./server/app.js",
     "start": "node ./server/app.js",
     "pretest": "eslint ./server --fix",
@@ -24,7 +26,7 @@
     "Redis",
     "Login"
   ],
-  "author": "Brad Hanel",
+  "author": "Bee Hanel",
   "license": "Apache 2.0",
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -38,6 +40,7 @@
   },
   "dependencies": {
     "@babel/compat-data": "^7.13.12",
+    "axios": "^0.21.1",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "connect-redis": "^4.0.4",

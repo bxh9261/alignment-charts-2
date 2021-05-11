@@ -45,9 +45,8 @@ const CharacterList = function(props) {
     const characterNodes = props.characters.map(function(character){
         return (
             <div key={character._id} className="character">
-                <h3 className="characterName">Name: {character.charname}</h3>
-                <h3 className="characterMedia">Media: {character.media}</h3>
-                <h3 className="characterImg">Image: {character.imageLink}</h3>
+                Name: {character.charname}
+                <img src={character.imageLink} alt={character.charname}></img>
             </div>
         );
     });

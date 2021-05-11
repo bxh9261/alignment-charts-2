@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 
+const convertId = mongoose.Types.ObjectId;
+
 let AccountModel = {};
 const iterations = 10000;
 const saltLength = 64;
@@ -78,6 +80,39 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
 
       return callback();
     });
+  });
+};
+
+AccountSchema.statics.updatePassword = (data, callback) => {
+  let currAcc = AccountModel.findByUsername(data.username, (err, doc) => {
+    if (err) {
+      return callback(err);
+    }
+
+    if (!doc) {
+      return callback();
+    }
+
+    return validatePassword(doc, data.oldpass, (result) => {
+      if (result === true) {
+        return callback(null, doc);
+      }
+      return callback();
+    });
+  });
+
+  const search = {
+    _id: convertId(currAcc._id)
+  };
+
+  AccountModel.generateHash(data.pass, (salt, hash) => {
+    const updateData = {
+      salt,
+      password: hash,
+    };
+
+    return AccountModel.find(search).findOneAndUpdate(search, updateData,
+      { useFindAndModify: false }, callback);
   });
 };
 

@@ -68,13 +68,10 @@ var CharacterList = function CharacterList(props) {
     return (/*#__PURE__*/React.createElement("div", {
         key: character._id,
         className: "character"
-      }, /*#__PURE__*/React.createElement("h3", {
-        className: "characterName"
-      }, "Name: ", character.charname), /*#__PURE__*/React.createElement("h3", {
-        className: "characterMedia"
-      }, "Media: ", character.media), /*#__PURE__*/React.createElement("h3", {
-        className: "characterImg"
-      }, "Image: ", character.imageLink))
+      }, "Name: ", character.charname, /*#__PURE__*/React.createElement("img", {
+        src: character.imageLink,
+        alt: character.charname
+      }))
     );
   });
   return (/*#__PURE__*/React.createElement("div", {

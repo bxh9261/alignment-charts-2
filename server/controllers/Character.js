@@ -74,22 +74,8 @@ const getCharacters = (request, response) => {
   });
 };
 
-const getPublicCharacters = (request, response) => {
-  const req = request;
-  const res = response;
-
-  return Character.CharacterModel.findAllPublic(req.session.account._id, (err, docs) => {
-    if (err) {
-      console.log(err);
-      return res.status(400).json({ error: 'An error occured' });
-    }
-    return res.json({ characters: docs });
-  });
-};
-
 module.exports.makerPage = makerPage;
 module.exports.getCharacters = getCharacters;
-module.exports.getPublicCharacters = getPublicCharacters;
 module.exports.make = makeCharacter;
 module.exports.publicPage = publicPage;
 module.exports.chartsPage = chartsPage;

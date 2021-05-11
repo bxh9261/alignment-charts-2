@@ -135,14 +135,14 @@ nav:nth-child(1) {
     background-color: #e40712;
 }
 
-#user, #pass, #pass2 {
+#user, #pass, #pass2, #oldpass {
     text-align: center;
     font-size: 1.1em;
     width: 180px;
     border-radius: 6px;
 }
 
-#user:focus, #pass:focus, #pass2:focus {
+#user:focus, #pass:focus, #pass2:focus, #oldpass:focus {
     outline: none;
     box-shadow: 0px 0px 1px 1px #e40712;
 }
@@ -210,6 +210,8 @@ nav:nth-child(1) {
     min-height:60px;
     overflow: hidden;
 }
+
+
 
 .character:hover {
     transition: border-color 0.2s ease-out;

@@ -1,9 +1,10 @@
+//send post request to log in
 const handleLogin = (e) => {
     e.preventDefault();
     
     
     if($("user").val() == '' || $("#pass").val() == '') {
-        handleError("RAWR! Username or password is empty");
+        handleError("Username or password is empty");
         return false;
     }
     
@@ -14,16 +15,17 @@ const handleLogin = (e) => {
     return false;
 }
 
+//send post request to sign up for a new account
 const handleSignup = (e) => {
     e.preventDefault();
     
         if($("user").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-        handleError("RAWR! Username or password is empty");
+        handleError("Username or password is empty");
         return false;
     }
     
     if($("#pass").val() !== $("#pass2").val()){
-        handleError("RAWR! Passwords do not match!");
+        handleError("Passwords do not match!");
         return false;
     }
     
@@ -32,16 +34,17 @@ const handleSignup = (e) => {
     return false;
 };
 
+//handle changing the user's password
 const handlePassword = (e) => {
     e.preventDefault();
     
         if($("user").val() == '' || $("#oldpass").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '') {
-        handleError("RAWR! Username or password is empty");
+        handleError("Username or password is empty");
         return false;
     }
     
     if($("#pass").val() !== $("#pass2").val()){
-        handleError("RAWR! Passwords do not match!");
+        handleError("Passwords do not match!");
         return false;
     }
     
@@ -50,6 +53,7 @@ const handlePassword = (e) => {
     return false;
 };
 
+//builds login options with React
 const LoginWindow = (props) => {
     return(
     <form id="loginForm" name="loginForm"
@@ -67,6 +71,7 @@ const LoginWindow = (props) => {
     );
 };
 
+//builds signup options with React
 const SignupWindow = (props) => {
     return(
     <form id="signupForm" name="signupForm"
@@ -86,6 +91,7 @@ const SignupWindow = (props) => {
     );
 };
 
+//builds password change screen with React
 const PasswordWindow = (props) => {
     return(
     <form id="passwordForm" name="passwordForm"
@@ -128,6 +134,7 @@ const createPasswordWindow = () => {
     );
 };
 
+//setup event listeners using the DOM
 const setup = () => {
     const loginButton = document.querySelector("#loginButton");
     const signupButton = document.querySelector("#signupButton");

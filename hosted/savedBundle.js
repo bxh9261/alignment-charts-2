@@ -1,6 +1,11 @@
 "use strict";
 
+var chartsG;
+
 var ChartList = function ChartList(props) {
+  console.log(props.charts.length);
+  chartsG = props.charts;
+
   if (props.charts.length === 0) {
     return (/*#__PURE__*/React.createElement("div", {
         className: "chartList"
@@ -12,20 +17,19 @@ var ChartList = function ChartList(props) {
 
   var chartNodes = props.charts.map(function (chart) {
     return (/*#__PURE__*/React.createElement("div", {
-        "class": "chart-content"
+        className: "chart-content"
       }, /*#__PURE__*/React.createElement("canvas", {
+        onLoad: DrawChart,
         width: "690",
         height: "640"
       }, "Your browser doesn't support canvas, so an image can not be created."), /*#__PURE__*/React.createElement("div", {
         id: "modalButtons"
       }, /*#__PURE__*/React.createElement("a", {
         href: "#",
-        id: "download",
-        download: "alignment-charts.png"
+        id: "download"
       }, "Download Image")))
     );
   });
-  drawChart(props.charts);
   return (/*#__PURE__*/React.createElement("div", {
       className: "canvasArea"
     }, chartNodes)
@@ -33,7 +37,7 @@ var ChartList = function ChartList(props) {
 }; //Do I need to credit myself? This is from https://people.rit.edu/bxh9261/330/exercises/hello-canvas.html
 
 
-var drawChart = function drawChart(charts) {
+var DrawChart = function DrawChart() {
   var canvas = document.querySelector("canvas"); // B - the ctx variable points at a “2D drawing context” 
 
   var ctx = canvas.getContext("2d"); // C - all fill operations are now in yellow 
@@ -80,9 +84,11 @@ var drawChart = function drawChart(charts) {
 
   for (var _i2 = 0; _i2 < 9; _i2 += 1) {
     //https://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
-    if (charts[0].imageLinks[_i2] !== '') {
+    splitLinks = imageLinks.split(',');
+
+    if (chartsG[0].splitLinks[_i2] !== '') {
       var base_image = new Image();
-      base_image.src = charts[0].imageLinks[_i2].src;
+      base_image.src = chartsG[0].splitLinks[_i2].src;
       base_image.width = "130";
       base_image.height = "130";
       var scale = Math.min(150 / base_image.width, 150 / base_image.height);
@@ -100,9 +106,6 @@ var loadChartsFromServer = function loadChartsFromServer() {
 };
 
 var setup = function setup() {
-  ReactDOM.render( /*#__PURE__*/React.createElement(ChartList, {
-    charts: []
-  }), document.querySelector("#savedCharts"));
   loadChartsFromServer();
 };
 

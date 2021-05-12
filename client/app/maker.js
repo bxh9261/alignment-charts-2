@@ -1,9 +1,9 @@
+//post a new characters to the server
 const handleChar = (e) => {
     e.preventDefault();
-    $("#characterMessage").animate({width:'hide'},350);
     
     if($("#characterName").val() == '' || $("#characterMedia").val() == '' || $("#characterImg").val() == '') {
-        handleError("RAWR! All fields are required!");
+        handleError("]All fields are required!");
         return false;
     }
     
@@ -14,6 +14,7 @@ const handleChar = (e) => {
     return false;
 };
 
+//React form to fill out with character information
 const CharacterForm = (props) => {
     return(
     <form id="characterForm" name="characterForm"
@@ -33,6 +34,7 @@ const CharacterForm = (props) => {
     );
 };
 
+//displays the list of characters currently tied to the user's account
 const CharacterList = function(props) {
     if(props.characters.length === 0){
         return (
@@ -57,6 +59,7 @@ const CharacterList = function(props) {
     );
 };
 
+//modify some handlebars with some react GET calls
 const loadCharactersFromServer = () => {
     sendAjax('GET', '/getCharacters', null, (data) => {
         ReactDOM.render(

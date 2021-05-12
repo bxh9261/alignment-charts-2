@@ -1,16 +1,28 @@
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
+const _ = require('underscore');
 
 let ChartModel = {};
 
 const convertId = mongoose.Types.ObjectId;
+const setImgLink = (imageLinks) => _.escape(imageLinks).trim();
 
 const ChartSchema = new mongoose.Schema({
-  imageLinks: [{
+  imageLinks: {
     type: String,
     trim: true,
-  }],
+    set: setImgLink,
+  },
+  owner: {
+    type: mongoose.Schema.ObjectId,
+    required: true,
+    ref: 'Account',
+  },
+  createdDate: {
+    type: Date,
+    default: Date.now,
+  },
 
 });
 
@@ -35,4 +47,4 @@ ChartSchema.statics.findByOwner = (ownerId, callback) => {
 ChartModel = mongoose.model('Chart', ChartSchema);
 
 module.exports.ChartModel = ChartModel;
-module.exports.CharatSchema = ChartSchema;
+module.exports.ChartSchema = ChartSchema;

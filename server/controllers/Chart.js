@@ -12,9 +12,11 @@ const savedPage = (req, res) => {
   });
 };
 
+//create a new Chart with up to 9 imageLinks (separated by commas)
 const makeChart = (req, res) => {
   const chartData = {
     imageLinks: req.body.imageLinks,
+    owner: req.session.account._id
   };
 
   const newChart = new Chart.ChartModel(chartData);
@@ -30,6 +32,7 @@ const makeChart = (req, res) => {
   return chartPromise;
 };
 
+//get all charts associated with the user
 const getCharts = (request, response) => {
   const req = request;
   const res = response;
@@ -42,19 +45,6 @@ const getCharts = (request, response) => {
     return res.json({ charts: docs });
   });
 };
-
-// const getPublicCharts = (request, response) => {
-//   const req = request;
-//   const res = response;
-
-//   return Character.CharacterModel.findAllPublic(req.session.account._id, (err, docs) => {
-//     if (err) {
-//       console.log(err);
-//       return res.status(400).json({ error: 'An error occured' });
-//     }
-//     return res.json({ characters: docs });
-//   });
-// };
 
 module.exports.getCharts = getCharts;
 module.exports.savedPage = savedPage;

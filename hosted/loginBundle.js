@@ -54,7 +54,7 @@ var LoginWindow = function LoginWindow(props) {
       onSubmit: handleLogin,
       action: "/login",
       method: "POST",
-      className: "mainForm"
+      className: "redbox"
     }, /*#__PURE__*/React.createElement("label", {
       htmlFor: "username"
     }, "Username: "), /*#__PURE__*/React.createElement("input", {
@@ -84,7 +84,7 @@ var SignupWindow = function SignupWindow(props) {
       onSubmit: handleSignup,
       action: "/signup",
       method: "POST",
-      className: "mainForm"
+      className: "redbox"
     }, /*#__PURE__*/React.createElement("label", {
       htmlFor: "username"
     }, "Username: "), /*#__PURE__*/React.createElement("input", {
@@ -121,7 +121,7 @@ var PasswordWindow = function PasswordWindow(props) {
       onSubmit: handlePassword,
       action: "/password",
       method: "POST",
-      className: "mainForm"
+      className: "redbox"
     }, /*#__PURE__*/React.createElement("label", {
       htmlFor: "username"
     }, "Username: "), /*#__PURE__*/React.createElement("input", {

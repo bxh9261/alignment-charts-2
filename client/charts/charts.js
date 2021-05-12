@@ -1,12 +1,31 @@
-const axios = require('axios');
-
 let alignBoxes;
 let charBoxes = [];
 let charSelected = -1;
 let charObj;
 let characterSet;
 
+//part of the code which doesn't work, intended to POST a list of images to the server to be printed on the canvas
+const handleChart = (e) => {
+    e.preventDefault();
 
+    let imageLinks = "";
+    for (let i = 0; i < alignBoxes.length; i += 1) {
+        if (alignBoxes[i].getElementsByTagName('img').length > 0) {
+            imageLinks = imageLinks.concat(alignBoxes[i].getElementsByTagName('img')[0].src + ",");
+        }
+        else {
+            imageLinks = imageLinks.concat(' ,');
+        }
+    }
+
+    let fakeChartForm = document.querySelector("#fakeChartForm");
+    fakeChartForm.value=imageLinks;
+    
+    sendAjax('POST', $("#chartForm").attr("action"), $("#chartForm").serialize(), function() {
+    });
+    
+    return false;
+};
 
 //click and unclick box
 const boxReset = () => {
@@ -44,6 +63,7 @@ const alignClicked = (e) => {
     }
 };
 
+//handle a character being clicked
 const charClicked = (e) => {
     // character was selected
     charBoxes = document.querySelectorAll(".cbox");
@@ -67,14 +87,14 @@ const clearClicked = () => {
 //get new characters on dropdown selected
 const resetChars = () => {
     const cboxes = document.querySelector('#characters-picker');
-    const mediaList  = document.querySelector('.mediaList');
+    const mediaList = document.querySelector('.mediaList');
     charBoxes = [];
     let selText = mediaList.options[mediaList.selectedIndex].text;
 
     sendAjax('GET', '/getCharacters', null, (data) => {
         const finalChars = [];
-        for(let i = 0; i < data.characters.length; i+=1){
-            if(data.characters[i].media === selText || selText === "ALL") {
+        for (let i = 0; i < data.characters.length; i += 1) {
+            if (data.characters[i].media === selText || selText === "ALL") {
                 finalChars.push(data.characters[i]);
             }
         }
@@ -87,6 +107,7 @@ const resetChars = () => {
 };
 
 //Do I need to credit myself? This is from https://people.rit.edu/bxh9261/330/exercises/hello-canvas.html
+//draw on the canvas!
 const drawChart = () => {
 
     // Get the modal
@@ -97,9 +118,6 @@ const drawChart = () => {
     xspan.addEventListener('click', closeModal);
 
     let canvas = document.querySelector("canvas");
-
-    let download = document.querySelector("#download");
-    download.addEventListener('click', downloadImage);
 
     // B - the ctx variable points at a “2D drawing context” 
     var ctx = canvas.getContext("2d");
@@ -181,30 +199,9 @@ const closeModal = () => {
     canvasModal.style.display = "none";
 }
 
-//https://stackoverflow.com/questions/8126623/downloading-canvas-element-to-an-image
-const saveImage = () => {
-    let download = document.querySelector("#download");
-    let body = {
-        imageLinks: []
-    };
-    if (alignBoxes[i].getElementsByTagName('img').length > 0) {
-        imageLinks.push(alignBoxes[i].getElementsByTagName('img')[0].src);
-    }
-    else{
-        imageLinks.push('');
-    }
-    
-    axios.post('/makeChart', body)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-}
-
+//original init function, adds event listeners
 const init = () => {
-    // An Event *Listeners*
+    // Add Event *Listeners*
     alignBoxes = document.querySelectorAll('.box');
     for (let i = 0; i < alignBoxes.length; i += 1) {
         alignBoxes[i].addEventListener('click', alignClicked);
@@ -221,8 +218,9 @@ const init = () => {
 
 };
 
-const CharacterList = function(props) {
-    if(props.characters.length === 0){
+//gets the character images and displays them in the box below the chart. modifies their CSS based on how many images there are in order to size and space them out properly
+const CharacterList = function (props) {
+    if (props.characters.length === 0) {
         return (
             <div className="characterList">
                 <h3 className="emptyCharacter">None yet</h3>
@@ -232,31 +230,32 @@ const CharacterList = function(props) {
     let boxwidth = "100%";
     let charwidth = "100%";
 
-    if(props.characters.length < 9){
-        boxwidth = props.characters.length*6 + "%";
-        charwidth = 100/props.characters.length + "%"; 
+    if (props.characters.length < 9) {
+        boxwidth = props.characters.length * 6 + "%";
+        charwidth = 100 / props.characters.length + "%";
     }
-    else{ 
+    else {
         boxwidth = "54%";
         charwidth = "11.11%";
-    }    
-      
-    const characterNodes = props.characters.map(function(character){
+    }
+
+    const characterNodes = props.characters.map(function (character) {
         return (
-            <div style={{width:charwidth}} key={character._id} className="cbox">
+            <div style={{ width: charwidth }} key={character._id} className="cbox">
                 <img onClick={charClicked} src={character.imageLink} alt={character.charname}></img>
             </div>
         );
     });
     return (
-        <div className="characterList" style={{width: boxwidth}} className="redbox">
+        <div className="characterList" style={{ width: boxwidth }} className="redbox">
             {characterNodes}
         </div>
     );
 };
 
-const CharacterDropDown = function(props) {
-    if(props.characters.length === 0){
+//populates the dropdown menu based on how many different types of media there are to choose from
+const CharacterDropDown = function (props) {
+    if (props.characters.length === 0) {
         return (
             <select className="mediaList">
                 <option>ALL</option>
@@ -270,8 +269,8 @@ const CharacterDropDown = function(props) {
             medArray.push(props.characters[i].media);
         }
     }
-      
-    const characterNodes = medArray.map(function(character){
+
+    const characterNodes = medArray.map(function (character) {
         return (
             <option key={character._id}>{character}</option>
         );
@@ -284,6 +283,24 @@ const CharacterDropDown = function(props) {
     );
 };
 
+//OK so. My brilliant idea for how to get my "saved charts" page working was to create a fake form and then have the form populated with the 9 images
+//from the chart, or empty spaces. Maybe there's an easier way to do it but I could not figure it out.
+const ChartSubmitter = function(props){
+    return(
+        <form id="chartForm" name="chartForm"
+        onSubmit={handleChart}
+        action="/makeChart"
+        method="POST"
+        className="chartForm"
+      >
+      <input id="fakeChartForm" type="text" name="imageLinks" className="invisible" placeholder=" , , , , , , , , "/>
+      <input className="makeChartSubmit" type="submit" value="Save To Accout" />
+    </form>
+    )
+
+}
+
+//modify some handlebars with some react GET calls
 const loadCharactersFromServer = () => {
     sendAjax('GET', '/getCharacters', null, (data) => {
         ReactDOM.render(
@@ -295,16 +312,21 @@ const loadCharactersFromServer = () => {
     });
 };
 
-const setup = function() {
+//is this still necessary? not sure, but it sets up for some react insertion into handlebars
+const setup = function () {
 
     ReactDOM.render(
         <CharacterList characters={[]} />, document.querySelector("#characters-picker")
     );
 
     ReactDOM.render(
+        <ChartSubmitter characters={[]} />, document.querySelector("#modalButtons")
+    );
+
+    ReactDOM.render(
         <CharacterDropDown characters={[]} />, document.querySelector("#characterSet")
     );
-    
+
     loadCharactersFromServer();
 };
 

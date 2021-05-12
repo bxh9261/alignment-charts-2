@@ -2,22 +2,41 @@
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
-var axios = require('axios');
-
 var alignBoxes;
 var charBoxes = [];
 var charSelected = -1;
 var charObj;
-var characterSet; //click and unclick box
+var characterSet;
+
+var handleChart = function handleChart(e) {
+  e.preventDefault();
+  var imageLinks = "";
+
+  for (var i = 0; i < alignBoxes.length; i += 1) {
+    if (alignBoxes[i].getElementsByTagName('img').length > 0) {
+      imageLinks = imageLinks.concat(alignBoxes[i].getElementsByTagName('img')[0].src + ",");
+      console.log(alignBoxes[i].getElementsByTagName('img')[0].src);
+    } else {
+      imageLinks = imageLinks.concat(' ,');
+      console.log("noooooooo");
+    }
+  }
+
+  var fakeChartForm = document.querySelector("#fakeChartForm");
+  fakeChartForm.value = imageLinks;
+  sendAjax('POST', $("#chartForm").attr("action"), $("#chartForm").serialize(), function () {});
+  return false;
+}; //click and unclick box
+
 
 var boxReset = function boxReset() {
-  for (var _i = 0; _i < charBoxes.length; _i += 1) {
-    if (_i === charSelected) {
-      charBoxes[_i].style.border = "#E40712 5px solid";
-      charBoxes[_i].style.backgroundColor = "#979AA4";
+  for (var i = 0; i < charBoxes.length; i += 1) {
+    if (i === charSelected) {
+      charBoxes[i].style.border = "#E40712 5px solid";
+      charBoxes[i].style.backgroundColor = "#979AA4";
     } else {
-      charBoxes[_i].style.border = "black 3px solid";
-      charBoxes[_i].style.backgroundColor = "#ddd";
+      charBoxes[i].style.border = "black 3px solid";
+      charBoxes[i].style.backgroundColor = "#ddd";
     }
   }
 }; //place an item... whether use clicks on the div or directly on the image currently on the board
@@ -47,9 +66,9 @@ var charClicked = function charClicked(e) {
   // character was selected
   charBoxes = document.querySelectorAll(".cbox");
 
-  for (var _i2 = 0; _i2 < charBoxes.length; _i2 += 1) {
-    if (e.target === charBoxes[_i2].getElementsByTagName('img')[0]) {
-      charSelected = _i2;
+  for (var i = 0; i < charBoxes.length; i += 1) {
+    if (e.target === charBoxes[i].getElementsByTagName('img')[0]) {
+      charSelected = i;
     }
   }
 
@@ -58,8 +77,8 @@ var charClicked = function charClicked(e) {
 
 
 var clearClicked = function clearClicked() {
-  for (var _i3 = 0; _i3 < alignBoxes.length; _i3 += 1) {
-    alignBoxes[_i3].innerHTML = "";
+  for (var i = 0; i < alignBoxes.length; i += 1) {
+    alignBoxes[i].innerHTML = "";
   }
 }; //get new characters on dropdown selected
 
@@ -72,9 +91,9 @@ var resetChars = function resetChars() {
   sendAjax('GET', '/getCharacters', null, function (data) {
     var finalChars = [];
 
-    for (var _i4 = 0; _i4 < data.characters.length; _i4 += 1) {
-      if (data.characters[_i4].media === selText || selText === "ALL") {
-        finalChars.push(data.characters[_i4]);
+    for (var i = 0; i < data.characters.length; i += 1) {
+      if (data.characters[i].media === selText || selText === "ALL") {
+        finalChars.push(data.characters[i]);
       }
     }
 
@@ -92,9 +111,7 @@ var drawChart = function drawChart() {
   canvasModal.style.display = "block";
   var xspan = document.querySelector(".close");
   xspan.addEventListener('click', closeModal);
-  var canvas = document.querySelector("canvas");
-  var download = document.querySelector("#download");
-  download.addEventListener('click', downloadImage); // B - the ctx variable points at a “2D drawing context” 
+  var canvas = document.querySelector("canvas"); // B - the ctx variable points at a “2D drawing context” 
 
   var ctx = canvas.getContext("2d"); // C - all fill operations are now in yellow 
 
@@ -124,29 +141,29 @@ var drawChart = function drawChart() {
   ctx.lineWidth = 5;
   ctx.beginPath(); //horizontal lines
 
-  for (var _i5 = 100; _i5 <= 640; _i5 += 170) {
-    ctx.moveTo(150, _i5);
-    ctx.lineTo(660, _i5);
+  for (var i = 100; i <= 640; i += 170) {
+    ctx.moveTo(150, i);
+    ctx.lineTo(660, i);
   } //vertical lines
 
 
-  for (var _i6 = 150; _i6 <= 690; _i6 += 170) {
-    ctx.moveTo(_i6, 100);
-    ctx.lineTo(_i6, 610);
+  for (var _i = 150; _i <= 690; _i += 170) {
+    ctx.moveTo(_i, 100);
+    ctx.lineTo(_i, 610);
   }
 
   ctx.closePath();
   ctx.stroke();
 
-  for (var _i7 = 0; _i7 < alignBoxes.length; _i7 += 1) {
+  for (var _i2 = 0; _i2 < alignBoxes.length; _i2 += 1) {
     //https://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
-    if (alignBoxes[_i7].getElementsByTagName('img').length > 0) {
+    if (alignBoxes[_i2].getElementsByTagName('img').length > 0) {
       var base_image = new Image();
-      base_image.src = alignBoxes[_i7].getElementsByTagName('img')[0].src;
+      base_image.src = alignBoxes[_i2].getElementsByTagName('img')[0].src;
       base_image.width = "130";
       base_image.height = "130";
       var scale = Math.min(150 / base_image.width, 150 / base_image.height);
-      ctx.drawImage(base_image, 155 + 170 * (_i7 % 3), 105 + 170 * Math.floor(_i7 / 3), base_image.width * scale, base_image.height * scale);
+      ctx.drawImage(base_image, 155 + 170 * (_i2 % 3), 105 + 170 * Math.floor(_i2 / 3), base_image.width * scale, base_image.height * scale);
     }
   }
 }; //X button on modal
@@ -155,34 +172,14 @@ var drawChart = function drawChart() {
 var closeModal = function closeModal() {
   var canvasModal = document.querySelector("#canvasModal");
   canvasModal.style.display = "none";
-}; //https://stackoverflow.com/questions/8126623/downloading-canvas-element-to-an-image
-
-
-var saveImage = function saveImage() {
-  var download = document.querySelector("#download");
-  var body = {
-    imageLinks: []
-  };
-
-  if (alignBoxes[i].getElementsByTagName('img').length > 0) {
-    imageLinks.push(alignBoxes[i].getElementsByTagName('img')[0].src);
-  } else {
-    imageLinks.push('');
-  }
-
-  axios.post('/makeChart', body).then(function (response) {
-    console.log(response);
-  })["catch"](function (error) {
-    console.log(error);
-  });
 };
 
 var init = function init() {
   // An Event *Listeners*
   alignBoxes = document.querySelectorAll('.box');
 
-  for (var _i8 = 0; _i8 < alignBoxes.length; _i8 += 1) {
-    alignBoxes[_i8].addEventListener('click', alignClicked);
+  for (var i = 0; i < alignBoxes.length; i += 1) {
+    alignBoxes[i].addEventListener('click', alignClicked);
   }
 
   characterSet = document.querySelector('#characterSet');
@@ -247,9 +244,9 @@ var CharacterDropDown = function CharacterDropDown(props) {
 
   var medArray = [];
 
-  for (var _i9 = 0; _i9 < props.characters.length; _i9 += 1) {
-    if (!medArray.includes(props.characters[_i9].media)) {
-      medArray.push(props.characters[_i9].media);
+  for (var i = 0; i < props.characters.length; i += 1) {
+    if (!medArray.includes(props.characters[i].media)) {
+      medArray.push(props.characters[i].media);
     }
   }
 
@@ -262,6 +259,28 @@ var CharacterDropDown = function CharacterDropDown(props) {
   return (/*#__PURE__*/React.createElement("select", {
       className: "mediaList"
     }, /*#__PURE__*/React.createElement("option", null, "ALL"), characterNodes)
+  );
+};
+
+var ChartSubmitter = function ChartSubmitter(props) {
+  return (/*#__PURE__*/React.createElement("form", {
+      id: "chartForm",
+      name: "chartForm",
+      onSubmit: handleChart,
+      action: "/makeChart",
+      method: "POST",
+      className: "chartForm"
+    }, /*#__PURE__*/React.createElement("input", {
+      id: "fakeChartForm",
+      type: "text",
+      name: "imageLinks",
+      className: "invisible",
+      placeholder: " , , , , , , , , "
+    }), /*#__PURE__*/React.createElement("input", {
+      className: "makeChartSubmit",
+      type: "submit",
+      value: "Save To Accout"
+    }))
   );
 };
 
@@ -280,6 +299,9 @@ var setup = function setup() {
   ReactDOM.render( /*#__PURE__*/React.createElement(CharacterList, {
     characters: []
   }), document.querySelector("#characters-picker"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(ChartSubmitter, {
+    characters: []
+  }), document.querySelector("#modalButtons"));
   ReactDOM.render( /*#__PURE__*/React.createElement(CharacterDropDown, {
     characters: []
   }), document.querySelector("#characterSet"));

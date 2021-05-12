@@ -1,4 +1,11 @@
+//this was just part of one of my several attempts at throwing code at a wall and hoping it'd stick
+let chartsG;
+
+//build a canvas for every saved chart
 const ChartList = function(props) {
+console.log(props.charts.length);
+chartsG= props.charts;
+
     if(props.charts.length === 0){
         return (
             <div className="chartList">
@@ -10,20 +17,18 @@ const ChartList = function(props) {
     const chartNodes = props.charts.map(function(chart){
         
         return (   
-                <div class="chart-content">
-                    <canvas width="690" height="640">
+                <div className="chart-content">
+                    <canvas onLoad={DrawChart} width="690" height="640">
 		            Your browser doesn't support canvas, so an image can not be created.
 	                </canvas>
                     <div id="modalButtons">
-                        <a href="#" id="download" download="alignment-charts.png">
+                        <a href="#" id="download">
                         Download Image
                         </a> 
                     </div>  
                 </div>
         );
     });
-
-    drawChart(props.charts);
 
     return (
         <div className="canvasArea">
@@ -32,8 +37,8 @@ const ChartList = function(props) {
     );
 };
 
-//Do I need to credit myself? This is from https://people.rit.edu/bxh9261/330/exercises/hello-canvas.html
-const drawChart = (charts) => {
+//draw on the canvases on the saved charts page
+const DrawChart = () => {
 
     let canvas = document.querySelector("canvas");
 
@@ -99,9 +104,10 @@ const drawChart = (charts) => {
 
     for (let i = 0; i < 9; i += 1) {
         //https://stackoverflow.com/questions/6011378/how-to-add-image-to-canvas
-        if (charts[0].imageLinks[i] !== '') {
+        splitLinks = imageLinks.split(',');
+        if (chartsG[0].splitLinks[i] !== '') {
             let base_image = new Image();
-            base_image.src = charts[0].imageLinks[i].src;
+            base_image.src = chartsG[0].splitLinks[i].src;
             base_image.width = "130";
             base_image.height = "130";
             let scale = Math.min(150 / base_image.width, 150 / base_image.height);
@@ -119,9 +125,6 @@ const loadChartsFromServer = () => {
 };
 
 const setup = function() {    
-    ReactDOM.render(
-        <ChartList charts={[]} />, document.querySelector("#savedCharts")
-    );
     
     loadChartsFromServer();
 };

@@ -7,7 +7,7 @@ var handleChar = function handleChar(e) {
   }, 350);
 
   if ($("#characterName").val() == '' || $("#characterMedia").val() == '' || $("#characterImg").val() == '') {
-    handleError("RAWR! All fields are required!");
+    handleError("All fields are required!");
     return false;
   }
 

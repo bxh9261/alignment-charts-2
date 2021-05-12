@@ -32,10 +32,11 @@ const chartsPage = (req, res) => {
   });
 };
 
+//post request to make a new character
 const makeCharacter = (req, res) => {
   if (!req.body.charname || !req.body.media || !req.body.imageLink) {
     console.log(req.body.charname + req.body.media + req.body.imageLink);
-    return res.status(400).json({ error: 'RAWR! All fields are required!' });
+    return res.status(400).json({ error: 'All fields are required!' });
   }
 
   const characterData = {
@@ -61,6 +62,7 @@ const makeCharacter = (req, res) => {
   return characterPromise;
 };
 
+//returns the list of all characters connected to the logged in user
 const getCharacters = (request, response) => {
   const req = request;
   const res = response;
